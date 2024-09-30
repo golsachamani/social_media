@@ -1,7 +1,8 @@
-from django.forms import Form, PasswordInput, TextInput, CharField, EmailInput
+from django.forms import Form, PasswordInput, TextInput, CharField, EmailInput,ModelForm
 from django.contrib.auth.forms import AuthenticationForm, UsernameField
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from . models import Profile
 
 
 class Login(Form):
@@ -42,3 +43,7 @@ class Signup(Form):
             password=self.cleaned_data['password1']
         )
         return user
+class Profile(ModelForm):
+    class Meta:
+        model = Profile
+        fields =['nikename','bio', 'image','user']
