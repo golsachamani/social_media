@@ -1,0 +1,27 @@
+{% extends '_base.html' %}
+{% block content %}
+  <div class="profile-container">
+    {% for profile in profiles %}
+      <a href="{%url 'profile_detail' profile.id%}">{{ profile.nikename }}'s Profile</a>
+
+      <div class="profile-picture">
+        {% if profile.image %}
+          <img src="{{ profile.image.url }}" alt="{{ profile.nikename }}'s profile picture" />
+        {% else %}
+          <p>No profile picture uploaded.</p>
+        {% endif %}
+      </div>
+
+      <div class="profile-details">
+        <p>
+          <strong>Email:</strong> {{ profile.user.email }}
+        </p>
+        <p>
+          <strong>Bio:</strong> {{ profile.bio }}
+        </p>
+      </div>
+
+     
+    {% endfor %}
+  </div>
+{% endblock %}

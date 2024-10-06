@@ -1,23 +1,26 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponseNotAllowed,HttpResponseBadRequest
+from django.http import HttpResponseNotAllowed, HttpResponseBadRequest
 from . models import Post
 from .import forms
 # Create your views here.
+
+
 def home(request):
     posts = Post.objects.all()
-    return render(request,'home.html',context={'posts': posts})
+    return render(request, 'home.html', context={'posts': posts})
 
-def post(request):  
+
+def post(request):
     if request.method == 'POST':
         form = forms.Post(request.POST)
         if form.is_valid():
-            post= form.save(commit=False)
+            post = form.save(commit=False)
             post.user = request.user
             post.save()
     return redirect('home')
-           
-            
-   
+
+
+
 # def post(request):
 #     if request.method not in (['POST','post']):
 #         return HttpResponseNotAllowed(['you can not post with get method'])
@@ -28,4 +31,3 @@ def post(request):
 #     post = models.Post(user,content)
 #     post.save()
 #     return redirect('home')
-           

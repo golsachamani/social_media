@@ -7,19 +7,19 @@ from . models import Profile
 
 class Login(Form):
 
-    username = CharField(widget=TextInput(
+    username = CharField(label='',widget=TextInput(
         attrs={'class': 'form-control', 'placeholder': 'Username'}))
-    password = CharField(widget=PasswordInput(
+    password = CharField(label="", widget=PasswordInput(
         attrs={'class': 'form-control', 'placeholder': 'Password'}))
 
 
 class Signup(Form):
-    username = CharField(widget=TextInput(
+    username = CharField(label="",widget=TextInput(
         attrs={'class': 'form-control', 'placeholder': 'Username'}))
-    password1 = CharField(widget=PasswordInput(
-        attrs={'class': 'form-control', 'placeholder': 'Password1'}))
-    password2 = CharField(widget=PasswordInput(
-        attrs={'class': 'form-control', 'placeholder': 'Password2'}))
+    password1 = CharField(label="",widget=PasswordInput(
+        attrs={'class': 'form-control', 'placeholder': 'Password'}))
+    password2 = CharField(label="",widget=PasswordInput(
+        attrs={'class': 'form-control', 'placeholder': 'Retype your password'}))
 
     def clean_username(self):
         username = self.cleaned_data.get('username')

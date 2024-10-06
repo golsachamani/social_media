@@ -5,7 +5,7 @@
     
     <div class="profile-picture">
       {% if profile.image %}
-        <img src="{{ profile.image.url }}" alt="{{ profile.nikename }}'s profile picture">
+        <img src="{{ profile.image.url }}" alt="{{ profile.nikename }}'s profile picture"/>
       {% else %}
         <p>No profile picture uploaded.</p>
       {% endif %}
@@ -17,6 +17,6 @@
      
     </div>
 
-    <a href="{% url 'update_profile' %}" class="btn btn-primary">Edit Profile</a>
+    <a href="{% url 'update_profile' profile.id %}" class="btn btn-primary">Edit Profile</a>
   </div>
 {% endblock %}

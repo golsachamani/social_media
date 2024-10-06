@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.views.generic import base, CreateView, FormView, DetailView, UpdateView
+from django.views.generic import base, CreateView, FormView, DetailView, UpdateView, ListView
 
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import get_object_or_404, redirect
@@ -53,32 +53,30 @@ class Signup(FormView):
     success_url = reverse_lazy('login')
 
     def form_valid(self, form):
-        form.save()  # Save the user to the database
-        return super().form_valid(form)
+        result = super().form_valid(form)
+        user = form.save()
+        login(self.request, user)
+        return redirect(self.success_url)
 
 
-class ProfileView(LoginRequiredMixin, DetailView):
+class ProfileListView(ListView):
     model = models.Profile
-    template_name = 'account/profile.html'
+    template_name = 'account/profile_list'
+    context_object_name = 'profiles'
+
+
+class ProfileDetailView(LoginRequiredMixin, DetailView):
+    model = models.Profile
+    template_name = 'account/profile_detail.html'
     context_object_name = 'profile'
     # This method is used to get the profile of the currently logged-in user
     # Automatically create a profile if it doesn't exist
 
-    def get_object(self):
-        profile, created = models.Profile.objects.get_or_create(
-            user=self.request.user)
-        return profile
-
-
-class CreateProfile(LoginRequiredMixin, CreateView):
-    form_class = forms.Profile
-    template_name = 'account/create_profile.html'
-    success_url = reverse_lazy('profile')
-
-    def form_valid(self, form):
-        # Attach the current user to the profile
-        form.instance.user = self.request.user
-        return super().form_valid(form)
+    # def get_object(self):
+    #     profile, created = models.Profile.objects.get_or_create(
+    #         user=self.request.user)
+    #     return profile
+    #   return models.Profile.objects.get(user=self.request.user)
 
 
 class UpdateProfile(LoginRequiredMixin, UpdateView):
@@ -87,7 +85,7 @@ class UpdateProfile(LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy('profile')
     # Override the get_object method to fetch or create the profile
 
-    def get_object(self):
-        profile, created = models.Profile.objects.get_or_create(
-            user=self.request.user)
-        return profile
+ # Automatically fetch the object to update using 'pk' from the URL
+    def get_object(self, queryset=None):
+        # Use 'username' if needed
+        return models.Profile.objects.get(pk=self.kwargs['pk'])
