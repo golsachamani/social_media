@@ -16,7 +16,7 @@
           <a class="nav-link" href="#">Notifications</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'profile' %}">Profile</a>
+          <a class="nav-link" href="{{user.profile.get_absolute_url}}">Profile</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">Switch account</a>

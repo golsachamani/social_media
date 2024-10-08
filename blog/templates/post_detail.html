@@ -1,0 +1,11 @@
+<div class="d-flex text-body-secondary pt-3">
+  <a href="{{ post.user.profile.get_absolute_url }}"><img src="{{ post.user.profile.image.url }}" class="tiny_profile_image" /></a>
+  <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
+    <strong class="d-block text-gray-dark"><a href="{{ post.user.profile.get_absolute_url }}">@{{ post.user.username }}</a></strong>
+    <p>{{ post.content }}</p>
+    <span><a href="{{post.get_like_url}}">{{ post.like_set.count }}</a></span>
+    <span><a href="{{post.get_dislike_url}}">{{ post.dislike_set.count }}</a></span>
+
+    <div class="w-100 text-end">{{ post.created_at }}</div>
+  </div>
+</div>

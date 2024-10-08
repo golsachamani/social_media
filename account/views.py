@@ -3,7 +3,7 @@ from django.views.generic import base, CreateView, FormView, DetailView, UpdateV
 
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import get_object_or_404, redirect
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
 from django.http import HttpRequest
 from . import forms
@@ -79,7 +79,7 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
     #   return models.Profile.objects.get(user=self.request.user)
 
 
-class UpdateProfile(LoginRequiredMixin, UpdateView):
+class UpdateProfile(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     form_class = forms.Profile
     template_name = 'account/update_profile.html'
     success_url = reverse_lazy('profile')
@@ -89,3 +89,6 @@ class UpdateProfile(LoginRequiredMixin, UpdateView):
     def get_object(self, queryset=None):
         # Use 'username' if needed
         return models.Profile.objects.get(pk=self.kwargs['pk'])
+    def test_func(self):
+        obj = self.get_object()
+        return obj.user == self.request.user
