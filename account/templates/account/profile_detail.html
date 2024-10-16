@@ -22,11 +22,34 @@
         <strong>Bio:</strong> {{ profile.bio }}
       </p>
     </div>
+    {% if request.user != profile.user %}
+      <div class="follow-unfollow-btn">
+        {% if is_following %}
+          <!-- If already following, show the Unfollow button -->
+          <form action="{% url 'unfollow_profile' profile.id %}" method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn unfollow-btn btn-primary">Unfollow</button>
+          </form>
+        {% else %}
+          <!-- If not following, show the Follow button -->
+          <form action="{% url 'follow_profile' profile.id %}" method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn follow-btn btn-outline-primary">Follow</button>
+          </form>
+        {% endif %}
+      </div>
+    {% endif %}
+    <!-- Display followers and following counts -->
+    <div class="profile-stats">
+      <span><strong>{{ profile.followers.count }}</strong> Followers</span>
+      <span><strong>{{ profile.following.count }}</strong> Following</span>
+    </div>
+
     {% if user.id == profile.user.id %}
       <a href="{% url 'update_profile' profile.id %}" class="btn btn-primary">Edit Profile</a>
     {% endif %}
     {% for post in profile.user.post_set.all %}
-      {% include "post_detail.html" %}
+      {% include 'post_detail.html' %}
     {% endfor %}
   </div>
 {% endblock %}

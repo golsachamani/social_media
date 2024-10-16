@@ -1,21 +1,23 @@
-{% extends "_base.html" %}
+{% extends '_base.html' %}
 
-{%block title%}Welcome my social media {%endblock%}
-{%block content%}
-
-<div class="my-3 p-3 bg-body rounded shadow-sm">
+{% block title %}
+  Welcome my social media
+{% endblock %}
+{% block content %}
+  <div class="my-3 p-3 bg-body rounded shadow-sm">
     <h6 class="border-bottom pb-2 mb-0">Recent Posts</h6>
 
     {% include 'post_list.html' %}
 
     <small class="d-block text-end mt-3"><a href="#">All updates</a></small>
   </div>
-      <div class="mb-3">
-        <form  class"form-contorol" action="{%url 'post'%}"  method="post" enctype="multipart/form-data" >
-          {% csrf_token %}
-          
-          <textarea class="form-contorol p-2 m-2" name="content" id="post-content" placeholder="what is in your mind?"></textarea>
-          <button type="submit" class="btn btn-primary m-3">send</button>
-        </form>
-      </div> 
+  <div class="mb-3">
+    <form class="form-control" action="{% url 'post' 0 %}" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      <textarea class="form-contorol p-2 m-2" name="content" id="post-content" placeholder="what is in your mind?"></textarea>
+      <input name="replied_to" type="hidden" value="" />
+      <button type="submit" class="btn btn-primary m-3">send</button>
+    </form>
+  </div>
 {% endblock %}

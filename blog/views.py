@@ -7,16 +7,20 @@ from .import forms, models
 
 
 def home(request):
-    posts = models.Post.objects.all()
-    return render(request, 'home.html', context={'posts': posts})
+    posts = models.Post.objects.filter(replied_to=None)
+    return render(request, 'home.html', context={'posts': posts })
 
 
-def post(request):
+def post(request,pk):
+    replied_to:models.Post=None
+    if pk!=0:
+        replied_to= models.Post.objects.get(pk=pk)
     if request.method == 'POST':
         form = forms.Post(request.POST)
         if form.is_valid():
             post = form.save(commit=False)
             post.user = request.user
+            post.replied_to = replied_to
             post.save()
     return redirect('home')
 
@@ -62,3 +66,46 @@ def dislike_post(request, pk):
     models.Like.objects.filter(post=post, user=user).delete()
 
     return redirect('home')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# @login_required
+# def like_post(request, pk):
+#     post = get_object_or_404(Post, pk=pk)
+#     user = request.user
+
+#     # Check if the user has disliked the post before, and if so, remove it
+#     if Dislike.objects.filter(post=post, user=user).exists():
+#         Dislike.objects.filter(post=post, user=user).delete()
+
+#     # If the user hasn't already liked the post, like it
+#     if not Like.objects.filter(post=post, user=user).exists():
+#         Like.objects.create(post=post, user=user)
+
+#     return redirect('post_detail', pk=pk)
+
+# @login_required
+# def dislike_post(request, pk):
+#     post = get_object_or_404(Post, pk=pk)
+#     user = request.user
+
+#     # Check if the user has liked the post before, and if so, remove it
+#     if Like.objects.filter(post=post, user=user).exists():
+#         Like.objects.filter(post=post, user=user).delete()
+
+#     # If the user hasn't already disliked the post, dislike it
+#     if not Dislike.objects.filter(post=post, user=user).exists():
+#         Dislike.objects.create(post=post, user=user)
+
+#     return redirect('post_detail', pk=pk)

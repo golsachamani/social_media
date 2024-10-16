@@ -3,9 +3,21 @@
   <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
     <strong class="d-block text-gray-dark"><a href="{{ post.user.profile.get_absolute_url }}">@{{ post.user.username }}</a></strong>
     <p>{{ post.content }}</p>
-    <span><a href="{{post.get_like_url}}">{{ post.like_set.count }}</a></span>
-    <span><a href="{{post.get_dislike_url}}">{{ post.dislike_set.count }}</a></span>
+    <span><a href="{{ post.get_like_url }}" class="like_icon"><i class="fa-regular fa-thumbs-up"></i> {{ post.like_set.count }}</a></span>
+    <span><a href="{{ post.get_dislike_url }}" class="dislike_icon"><i class="fa-regular fa-thumbs-down"></i> {{ post.dislike_set.count }}</a></span>
+    <a class="" data-bs-toggle="collapse" href="#replyPost{{ post.id }}" role="button" aria-expanded="false" aria-controls="collapseExample">Reply ({{post.replies.count}})</a>
+    <div class="collapse" id="replyPost{{ post.id }}">
+      <form action="{% url 'post' post.id %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
 
-    <div class="w-100 text-end">{{ post.created_at }}</div>
+        <textarea class="form-contorol p-2 m-2" name="content" id="post-content" placeholder="what is in your mind?"></textarea>
+        <input name="replied_to" type="hidden" value="" />
+        <button type="submit" class="btn btn-primary m-3">send</button>
+      </form>
+      <div class="w-100 text-end">{{ post.created_at }}</div>
+      {% for post in post.replies %}
+        {% include 'post_detail.html' %}
+      {% endfor %}
+    </div>
   </div>
 </div>
