@@ -7,10 +7,12 @@ class Profile(models.Model):
     bio = models.TextField()
     image= models.ImageField(upload_to = 'profile_image/',blank=True,null=True)
     user = models.OneToOneField(User,on_delete=models.CASCADE)
+    is_private= models.BooleanField(default=False)
     def __str__(self):
         return f'{self.nikename}@{self.user.username}'
     def get_absolute_url(self):
         return reverse('profile_detail' , args=[self.id])
+    
 
 class Follow(models.Model):
     follower= models.ForeignKey(Profile,on_delete=models.CASCADE,related_name='following')

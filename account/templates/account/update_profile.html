@@ -2,10 +2,11 @@
 {% block content %}
   <div class="profile-container">
     <h2>Edit Your Profile</h2>
-    <form method="POST" enctype="multipart/form-data">
+    <form method="POST" enctype="multipart/form-data" action="{% url 'update_profile' profile.id %}">
       {% csrf_token %}
+
       {{ form.as_p }}
-      <a href="{%url 'profile' %}" class="btn btn-primary col-2"> save shange</a>
+      <input type="submit" class="btn btn-primary"  value="save" />
     </form>
   </div>
 {% endblock %}

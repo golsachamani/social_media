@@ -1,14 +1,16 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.shortcuts import reverse
+from tinymce import models as tinymce_models
+from account import models as account_models
 
 
 class Post(models.Model):
-    content = models.TextField()
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='post_image/', blank=True, null=True)
+    content = tinymce_models.HTMLField()
+    profile = models.ForeignKey(account_models.Profile, on_delete=models.CASCADE,default=None,null=True)
     created_at = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     replied_to = models.ForeignKey('Post', on_delete=models.CASCADE, null=True)
+
     def replies(self):
         return Post.objects.filter(replied_to=self.id)
 
@@ -20,20 +22,18 @@ class Post(models.Model):
 
     def get_dislike_url(self):
         return reverse('dislike_post', args=[self.id])
-    def get_reply_url(self):
-        return 
 
+    def get_reply_url(self):
+        return reverse('post', args=[self.id])
 
 
 class Like(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    profile = models.ForeignKey(account_models.Profile, on_delete=models.CASCADE,null=True,default=None)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     created_at = models.DateTimeField(blank=True, null=True, auto_now_add=True)
 
 
 class DisLike(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    profile = models.ForeignKey(account_models.Profile, on_delete=models.CASCADE,null=True,default=None)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     created_at = models.DateTimeField(blank=True, null=True, auto_now_add=True)
-
-

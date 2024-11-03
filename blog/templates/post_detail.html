@@ -1,13 +1,13 @@
 <div class="d-flex text-body-secondary pt-3">
-  <a href="{{ post.user.profile.get_absolute_url }}"><img src="{{ post.user.profile.image.url }}" class="tiny_profile_image" /></a>
+  <a href="{{ post.profile.get_absolute_url }}"><img src="{{ post.profile.image.url }}" class="tiny_profile_image" /></a>
   <div class="pb-3 mb-0 small lh-sm border-bottom w-100">
-    <strong class="d-block text-gray-dark"><a href="{{ post.user.profile.get_absolute_url }}">@{{ post.user.username }}</a></strong>
+    <strong class="d-block text-gray-dark"><a href="{{ post.profile.get_absolute_url }}">@{{post.profile.nikename }}</a></strong>
     <p>{{ post.content }}</p>
     <span><a href="{{ post.get_like_url }}" class="like_icon"><i class="fa-regular fa-thumbs-up"></i> {{ post.like_set.count }}</a></span>
     <span><a href="{{ post.get_dislike_url }}" class="dislike_icon"><i class="fa-regular fa-thumbs-down"></i> {{ post.dislike_set.count }}</a></span>
     <a class="" data-bs-toggle="collapse" href="#replyPost{{ post.id }}" role="button" aria-expanded="false" aria-controls="collapseExample">Reply ({{post.replies.count}})</a>
     <div class="collapse" id="replyPost{{ post.id }}">
-      <form action="{% url 'post' post.id %}" method="post" enctype="multipart/form-data">
+      <form action="{{post.get_reply_url}}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
 
         <textarea class="form-contorol p-2 m-2" name="content" id="post-content" placeholder="what is in your mind?"></textarea>

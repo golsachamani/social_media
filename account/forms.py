@@ -46,4 +46,4 @@ class Signup(Form):
 class Profile(ModelForm):
     class Meta:
         model = Profile
-        fields =['nikename','bio', 'image','user']
+        fields =['nikename','bio', 'image', 'is_private']
