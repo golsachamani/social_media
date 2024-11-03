@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
-from . import models, serilizers
+from . import models, serializers
 # Create your views here.
 
 
@@ -26,16 +26,16 @@ def home(request):
 def post(request, pk):
     if request.method == "GET":
         post = models.Post.objects.get(pk=pk)
-        serilizer = serilizers.Post(post)
-        return Response(serilizer.data)
+        serializer = serializers.Post(post)
+        return Response(serializer.data)
 
     elif request.method == "POST":
         replied_to: models.Post = None
         if pk != 0:
             replied_to = models.Post.objects.get(pk=pk)
-        serilizer = serilizers.Post(data=request.data)
-        if serilizer.is_valid():
-            post = serilizer.save(commit=False)
+        serializer = serializers.Post(data=request.data)
+        if serializer.is_valid():
+            post = serializer.save(commit=False)
             post.profile = request.user.profile
             post.replied_to = replied_to
             post.save()
@@ -70,7 +70,7 @@ def post(request, pk):
 @api_view(["GET"])
 def posts(request):
     all_posts = models.Post.objects.filter(replied_to=None)
-    serilizer = serilizers.Post(all_posts, many=True)
+    serializer = serializers.Post(all_posts, many=True)
     return Response(data=serilizer.data)
 
 

@@ -17,17 +17,17 @@ from django.http import HttpRequest
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
-from . import serilizers
+from . import serializers
 from . import models
 # Create your views here.
 
 
 @api_view(["POST"])
 def signin(request):
-    serilizer = serializers.Login(request.data)
-    if serilizer.is_valid():
-        username = serilizer.username
-        password = serilizer.password
+    serializer = serializers.Login(request.data)
+    if serializer.is_valid():
+        username = serializer.username
+        password = serializer.password
         user = authenticate(
             request=request, username=username, password=password)
         if user is not None:
@@ -78,9 +78,9 @@ def signout(request):
 
 @api_view(["POST"])
 def signup(request):
-    serilizer = serilizers.Signup(request.data)
-    if serilizer.is_valid():
-        user = serilizer.save()
+    serializer = serializers.Signup(request.data)
+    if serializer.is_valid():
+        user = serializer.save()
         login(request, user)
         return Response(status=status.HTTP_201_CREATED)
     return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -105,8 +105,8 @@ def profile(request, pk):
         return Response(data=serializer.data)
     elif request.method == "POST":
         serializer = serializers.Profile(request.data)
-        if serilizer.is_valid():
-            profile = serilizer.save(commit=False)
+        if serializer.is_valid():
+            profile = serializer.save(commit=False)
             profile.save()
             return Response(status=status.HTTP_202_ACCEPTED)
         return Response(status=status.HTTP_400_BAD_REQUEST)
